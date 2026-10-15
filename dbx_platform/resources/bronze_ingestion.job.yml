@@ -1,3 +1,6 @@
+# Auto-generated from src/dbx_platform/config.py
+# Do not edit manually.
+
 resources:
   jobs:
     bronze_ingestion_job:
@@ -8,13 +11,19 @@ resources:
 
       max_concurrent_runs: 1
 
-      parameters:
-        - name: dataset_name
-          default: ""
+      schedule:
+        quartz_cron_expression: "0 0 9 * * ?"
+        timezone_id: Australia/Brisbane
+        pause_status: PAUSED
 
       tasks:
-        - task_key: ingest_dataset_to_bronze
-          notebook_task:
-            notebook_path: ../notebooks/01_bronze_ingestion.ipynb
-            base_parameters:
-              dataset_name: "{{job.parameters.dataset_name}}"
+      - task_key: ingest_routes_to_bronze
+        notebook_task:
+          notebook_path: ../notebooks/01_bronze_ingestion.ipynb
+          base_parameters:
+            dataset_name: routes
+      - task_key: ingest_transactions_to_bronze
+        notebook_task:
+          notebook_path: ../notebooks/01_bronze_ingestion.ipynb
+          base_parameters:
+            dataset_name: transactions
