@@ -1,0 +1,36 @@
+
+name: Databricks Platform CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      PYTHONPATH: ${{ github.workspace }}/dbx_platform/src:${{ github.workspace }}/dbx_platform
+
+    defaults:
+      run:
+        working-directory: dbx_platform
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: python -m pip install pytest
+
+      - name: Run unit tests
+        run: python -m pytest tests/unit/ -v
